@@ -15,8 +15,8 @@ func messageCreateEvent(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if m.Message.Content == "!tabela" {
 		tabela := FetchTable()
 		buf := bytes.Buffer{}
-		for k, v := range tabela {
-			buf.WriteString(fmt.Sprintf("Time %s: %s", k, v) + "\n")
+		for _, score := range tabela {
+			buf.WriteString(fmt.Sprintf("%s: %d", score.team, score.points) + "\n")
 		}
 
 		s.ChannelMessageSend(m.ChannelID, buf.String())
