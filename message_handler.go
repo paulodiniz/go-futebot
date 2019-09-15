@@ -1,8 +1,8 @@
 package main
 
 import (
-	"log"
-	"time"
+	"bytes"
+	"fmt"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -11,5 +11,14 @@ func messageCreateEvent(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if m.Author.ID == s.State.User.ID {
 		return
 	}
-	log.Printf("%20s %20s %20s > %s\n", m.ChannelID, time.Now().Format(time.Stamp), m.Author.Username, m.Content)
+
+	if m.Message.Content == "!tabela" {
+		tabela := FetchTable()
+		buf := bytes.Buffer{}
+		for k, v := range tabela {
+			buf.WriteString(fmt.Sprintf("Time %s: %s", k, v) + "\n")
+		}
+
+		s.ChannelMessageSend(m.ChannelID, buf.String())
+	}
 }
